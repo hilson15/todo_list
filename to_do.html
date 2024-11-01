@@ -9,9 +9,17 @@
 <body>
     
     <div id="main_container">
+        <div id="alertDisplay"></div>
         <h1>To Do List</h1>
         <div class="data_input">
             <input type="text" id="taskInput" placeholder="Enter the Event">
+            <input type="date" id="dateInput" placeholder="Date here">
+            <select name="priority" id="priorityInput">
+                <option value="Select Priority"> Select Priority</option>
+                <option value="High">Hight Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+            </select>
             <!-- <input type="date" id="taskDate" placeholder="Enter the Date and time of event"><br> -->
             <button id="addBtn">Add to List</button>
         </div>
@@ -19,6 +27,21 @@
             <button id="allBtn">All</button> 
             <button id="completedBtn">Completed</button> 
             <button id="pendingBtn">Pending</button>
+            <button id="byDate">Todays Tasks</button>
+            <!-- <button id="byPriority">Priority</button> -->
+
+            <!-- Add a dropdown for filtering by priority -->
+             <button class="priorityFilter">
+                <select id="priorityFilter">
+                <option value="All">All Priorities</option>
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+            </select>
+        </button>
+    
+    <!-- <button id="filterByPriorityBtn">Filter by Priority</button> -->
+            
         </div>
 
         <div id="display_field">

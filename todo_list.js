@@ -1,95 +1,159 @@
-// Creating array to store the tasks. setting it to be empty at first
 let tasks = [];
 
-//a function to Add a new task object to the tasks array.
-function addTasks(task) {
-    tasks.push({ text: task, completed: false}); 
+// Function to add a new task object to the tasks array.
+function addTasks(task, date, priority) {
+    tasks.push({ text: task, completed: false, dueDate: date, priority: priority }); 
+    const messageDiv = document.getElementById('alertDisplay');
+    messageDiv.textContent = 'Task added successfully'
+
+    setTimeout(() => {
+        messageDiv.style.display = 'none';
+
+    }, 3000);
 }
 
-// function to Toggle the completed status of the task at the specified index.
 function toggleTaskStatus(index) {
     tasks[index].completed = !tasks[index].completed; 
 }
 
-
-// Remove the task from the tasks array at the given index.
-
 function deleteTask(index) {
     tasks.splice(index, 1); 
 }
-// Function to filter tasks based on the selected filter
-function filterTasks(filter) {
-    if (filter === 'All') return tasks; // Return all tasks if the filter is 'All'.
-    return tasks.filter(task => (filter === 'Completed' ? task.completed : !task.completed)); // Filter by completion status.
+
+// Function to remove active class from all filter buttons
+function removeActiveClasses() {
+    const buttons = document.querySelectorAll('#subSection button');
+    buttons.forEach(button => {
+        button.classList.remove('active'); // Remove active class
+    });
 }
 
-// Event listener for the Add Task button
-document.getElementById('addBtn').addEventListener('click', () => {
-    const userTaskInput = document.getElementById('taskInput'); // Get the input field.
-    const taskText = userTaskInput.value.trim(); // Get and trim the input value.
-    // const taskDate = document.getElementById('taskDate').value;
-    // const userDate = parseInt(taskDate);
-    if (taskText) { // Check if the input is not empty.
-        addTasks(taskText); // Add the task to the tasks array.
-        userTaskInput.value = ""; // Clear the input field.
-        // taskDate.value = "";
-        renderTasks(); // Refresh the task list to display the new task.
-    }
-});
-
-// Adding event listeners for the filter buttons
-document.getElementById('allBtn').addEventListener('click', () => renderTasks('All'));
-document.getElementById('completedBtn').addEventListener('click', () => renderTasks('Completed'));
-document.getElementById('pendingBtn').addEventListener('click', () => renderTasks('Pending'));
-
-// Function to render tasks based on the current filter
 function renderTasks(filter = 'All') {
     const taskList = document.getElementById('taskList'); // Get the UL element for tasks.
     taskList.innerHTML = ""; // Clear the current list.
 
-    const filteredTasks = filterTasks(filter); // Get the tasks based on the current filter.
-    filteredTasks.forEach((task, index) => { // Loop through each filtered task.
-        const li = document.createElement('li'); // Create a new list item for the task.
-        li.textContent = task.text; // Set the text of the list item to the task's text.
+    let filteredTasks;
+    if (filter === 'All') {
+        filteredTasks = tasks;
+    } else if (filter === 'Completed') {
+        filteredTasks = tasks.filter(task => task.completed);
+    } else if (filter === 'Pending') {
+        filteredTasks = tasks.filter(task => !task.completed);
+    } else if (filter === 'Today') {
+        const today = new Date().toISOString().split('T')[0]; 
+        filteredTasks = tasks.filter(task => task.dueDate === today);
+    } else {
+        filteredTasks = tasks.filter(task => task.priority === filter);
+    }
 
-        // Create a button to toggle completion
+    filteredTasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.classList.add('listElement')
+        li.textContent = `${task.text} (Due: ${task.dueDate}, Priority: ${task.priority})`;
+
+        // div for buttons
+        const buttonDiv = document.createElement('div');
+        buttonDiv.classList.add('button-container');
+
+        // Text input for editing the task
+        const taskInput = document.createElement('input');
+        taskInput.type = 'text';
+        taskInput.value = task.text;
+        taskInput.style.display = 'none'; // Hide it initially
+
         const toggleButton = document.createElement('button');
-        toggleButton.style.backgroundColor = 'green';
-        toggleButton.style.color = 'white';
-        toggleButton.style.border = 'none';
-        toggleButton.style.padding = '8px';
-        toggleButton.style.width = '100px';
-        toggleButton.textContent = task.completed ? 'Undo' : 'Complete'; // Change button text based on completion status.
+        toggleButton.textContent = task.completed ? 'Undo' : 'Complete'; 
+        toggleButton.classList.add('toggleBtn');
         toggleButton.addEventListener('click', () => {
-            toggleTaskStatus(index); // Toggle the task's completion status.
-            renderTasks(filter); // Refresh the task list to show updated status.
+            toggleTaskStatus(index); 
+            renderTasks(filter); 
         });
 
-        // Create a button to delete the task
         const deleteButton = document.createElement('button');
-        deleteButton.style.backgroundColor = 'red';
-        deleteButton.style.border = 'none';
-        deleteButton.style.padding = '8px';
-        deleteButton.style.width = '100px';
-        deleteButton.style.color = 'white';
-        deleteButton.textContent = 'Delete'; // Set text for the delete button.
+        deleteButton.classList.add('deletingBtn');
+        deleteButton.textContent = 'Delete'; 
         deleteButton.addEventListener('click', () => {
-            deleteTask(index); // Delete the task at the given index.
-            renderTasks(filter); // Refresh the task list after deletion.
+            deleteTask(index); 
+            renderTasks(filter); 
         });
 
-        // const decision = document.getElementById('decision');
-        // decision.appendChild(toggleButton);
-        // Append buttons to the list item
-        li.appendChild(toggleButton);
-        toggleButton.style.marginTop = '20px';
-        toggleButton.style.marginLeft = '50px';
-         // Add the toggle button to the list item.
-        //  decision.appendChild(deleteButton);
-        li.appendChild(deleteButton); 
-        deleteButton.style.marginLeft = '20px';
-        // Add the delete button to the list item.
-        taskList.appendChild(li); // Append the list item to the task list.
-        // li.appendChild(userDate);
+        const toggleEdit = document.createElement('button');
+        toggleEdit.textContent = 'Edit';
+        toggleEdit.classList.add('editingBtn');
+        toggleEdit.addEventListener('click', () => {
+            if (toggleEdit.textContent === 'Edit') {
+                taskInput.style.display = 'inline'; // Show the input
+                toggleEdit.textContent = 'Save'; // Change button text
+            } else {
+                tasks[index].text = taskInput.value; // Update the task text
+                taskInput.style.display = 'none'; // Hide the input again
+                toggleEdit.textContent = 'Edit'; // Change button text back
+                renderTasks(filter); // Refresh the task list
+            }
+        });
+
+        // Append buttons to the buttonDiv
+    buttonDiv.appendChild(toggleButton);
+    buttonDiv.appendChild(deleteButton);
+    buttonDiv.appendChild(toggleEdit);
+    
+    li.appendChild(taskInput); // Append task input
+    li.appendChild(buttonDiv); // Append the button container
+    taskList.appendChild(li);
+
     });
 }
+
+// Event listener for the Add Task button
+document.getElementById('addBtn').addEventListener('click', () => {
+    const userTaskInput = document.getElementById('taskInput'); 
+    const taskText = userTaskInput.value.trim(); 
+    const dueDate = document.getElementById('dateInput').value;
+    const priorityInput = document.getElementById('priorityInput').value;
+    
+    if (taskText && dueDate && priorityInput !== 'Select Priority') {
+        addTasks(taskText, dueDate, priorityInput); 
+        userTaskInput.value = ""; 
+        document.getElementById('dateInput').value = "";
+        document.getElementById('priorityInput').selectedIndex = 0; 
+        renderTasks(); 
+    }
+});
+
+// Adding event listeners for the filter buttons
+document.getElementById('allBtn').addEventListener('click', () => {
+    removeActiveClasses();
+    document.getElementById('allBtn').classList.add('active');
+    renderTasks('All');
+});
+
+document.getElementById('completedBtn').addEventListener('click', () => {
+    removeActiveClasses();
+    document.getElementById('completedBtn').classList.add('active');
+    renderTasks('Completed');
+});
+
+document.getElementById('pendingBtn').addEventListener('click', () => {
+    removeActiveClasses();
+    document.getElementById('pendingBtn').classList.add('active');
+    renderTasks('Pending');
+});
+
+document.getElementById('byDate').addEventListener('click', () => {
+    removeActiveClasses();
+    document.getElementById('byDate').classList.add('active');
+    renderTasks('Today'); // Use a string to match the renderTasks function
+});
+
+// Priority filter dropdown listener
+document.getElementById('priorityFilter').addEventListener('change', () => {
+    const priorityInput = document.getElementById('priorityFilter').value;
+    removeActiveClasses();
+    const buttons = document.querySelectorAll('#subSection button');
+    buttons.forEach(button => {
+        if (button.textContent === priorityInput) {
+            button.classList.add('active');
+        }
+    });
+    renderTasks(priorityInput);
+});

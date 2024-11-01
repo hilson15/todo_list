@@ -1,7 +1,7 @@
 body{
     margin: 0;
     padding: 0;
-    background-color: #2d3942;
+    background-color: #2d394233;
 
 }
 #main_container{
@@ -16,6 +16,33 @@ body{
     border: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+
+#alertDisplay{
+    max-width: fit-content;
+    background-color: rgba(144, 238, 144, 0.63);
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
+.button-container {
+    width: 70%;
+    margin: 10px auto; /* Add space above the button container */
+    display: flex; /* Use flexbox for horizontal layout of buttons */
+    gap: 10px; /* Space between buttons */
+    
+}
+
+.li{
+    background-color: rgba(48, 56, 71, 0.048);
+    list-style: none;
+    width: 70%;
+    margin: 10px auto;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    
+}
 .data_input{
     display: flex;
     flex-direction: column;
@@ -27,6 +54,8 @@ input{
     padding: 8px 5px;
     flex: 1;
     border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px 0;
 }
 input:focus {
     outline: none; 
@@ -34,9 +63,10 @@ input:focus {
 }
 #addBtn{
     margin-right: 20px;
-    width: 70%;
-    padding: 6px;
+    width: 72%;
+    padding: 10px;
     border: none;
+    border-radius: 8px;
     /* border-radius: 5px; */
     background-color: #48d9f3;
     font-weight: 700;
@@ -44,27 +74,126 @@ input:focus {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     color: #f5f5f5;
     font-size: 16px;
+}
+select{
+    max-width: 72%;
+    /* max-width: 70%; */
+    padding: 8px 5px;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px 0;
+
+    
+}
+select:focus{
+    outline: none;
+}
+ #allBtn, #completedBtn, #pendingBtn, .priorityFilter, #filterByPriorityBtn, #byDate{
+    /* background-color: #48d9f311; */
+    /* background-color: rgba(48, 56, 71, 0.048);  */
+    background-color: rgba(192, 192, 192, 0.411);
+    width: fit-content;
+    height: fit-content;
+    /* padding: -2% 4%; */
+    padding: 8px 10px;
+    border: none;
+    /* border-radius: 5px; */
+    font-weight: 400;
+    cursor: pointer;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.116); */
+    font-size: 16px;
+     border-radius: 5px;
+     cursor: pointer;
+     
 }
 
- #allBtn, #completedBtn, #pendingBtn{
-    background-color: #48d9f3;
+
+#priorityFilter{
+    background-color: transparent;
+    border: none;
     width: 100px;
-    padding: 6px;
+    /* height: 20%; */
+    cursor: pointer;
+    margin-top: -10px;
+}
+.priorityFilter{
+    background-color: rgba(192, 192, 192, 0.411);
+    /* background-color: red; */
+    width: 120px;
+    height: 35px;
+    /* padding: -2% 4%; */
+    padding: 8px 10px;
     border: none;
     /* border-radius: 5px; */
-    font-weight: 700;
+    font-weight: 400;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    color: #f5f5f5;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.116); */
     font-size: 16px;
+     border-radius: 5px;
+     cursor: pointer;
 }
+#priorityFilter:focus{
+    outline: none;
+}
+.listElement{
+    background-color: rgba(192, 192, 192, 0.116);
+    /* background-color: rgba(173, 216, 230, 0.322); */
+    padding: 18px 0;
+    border-radius: 5px;
+    margin: 15px;
+    list-style: none;
+}
+
+.toggleBtn{
+    background-color: green;
+    border: none;
+    padding: 8px 10px;
+    color: white;
+    margin: 0 10px;
+    border-radius: 5px;
+    margin-left: 20%;
+}
+
+.editingBtn{
+    background-color: lightgreen;
+    border: none;
+    padding: 8px 10px;
+    color: black;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+.deletingBtn{
+    background-color: red;
+    border: none;
+    padding: 8px 10px;
+    color: white;
+    margin: 0 10px;
+    border-radius: 5px;
+    
+}
+.active {
+    background-color: #0056b3; /* Active button color */
+    color: white;              /* Active text color */
+}
+
+#subSection button.active {
+    background-color: #007bff; /* Active background color */
+    color: white; /* Active text color */
+    border: 1px solid #0056b3; /* Active border color */
+}
+
+
 
 #subSection{
-   
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
     margin: 20px;
 }
 
 #subSection button{
+    
     margin: 0 25px;
     margin-top: 40px;
 
@@ -131,6 +260,10 @@ input:focus {
 }
 
 @media (min-width:768px) and (max-width:991px){
+    body{
+        background-color: silver;
+        color: white;
+    }
     #main_container{
         max-width: 50%;
         background-color: #2d3942;
